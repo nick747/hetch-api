@@ -24,9 +24,7 @@
   },
   "homepage": "https://github.com/nick747/hetch-api#readme",
   "devDependencies": {
+    "typedoc": "^0.24.8",
     "typescript": "^5.1.6"
-  },
-  "dependencies": {
-    "node-fetch": "^3.3.1"
   }
 }
