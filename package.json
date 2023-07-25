@@ -1,0 +1,32 @@
+{
+  "name": "hetch-api",
+  "version": "1.0.0",
+  "description": "HTTP Request managing library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick747/hetch-api.git"
+  },
+  "keywords": [
+    "typescript",
+    "http",
+    "axios",
+    "fetch",
+    "hetch"
+  ],
+  "author": "Nick747, LuaInjector",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nick747/hetch-api/issues"
+  },
+  "homepage": "https://github.com/nick747/hetch-api#readme",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.1"
+  }
+}
