@@ -1,13 +1,14 @@
 /**
  * We currently use TSDoc to document the code.
- * TODO: finish interceptors
- * TODO: add response file conversion
- * TODO: error management
- * TODO: headers
- * TODO: improve timeout
- * TODO: retry function
+ * TODO: finish interceptors (DONE) 
+ * TODO: add response file conversion (SEMI-DONE)
+ * TODO: error management (SEMI-DONE)
+ * TODO: headers (DONE)
+ * TODO: improve timeout 
+ * TODO: retry function (DONE)
  * TODO: finish documentation.
- * TODO: create tsconfig.json file.
+ * TODO: create tsconfig.json file
+ * TODO: remove 'any' tipes
  */
 
 export type Interceptor = {
