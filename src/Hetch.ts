@@ -17,12 +17,16 @@ export type Interceptor = {
 
 interface RequestConfig extends RequestInit {
   timeout?: number;
-};
+  maxRetries?: number; // the maximum number of retries for network errors
+  retryDelay?: number; // the dealy between each try
+}
 
 export class Hetch {
   private defaults: RequestConfig = {
     headers: {},
     timeout: 0,
+    maxRetries: 3,
+    retryDelay: 1000,
   };
 
   private interceptors = {
@@ -58,8 +62,8 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async request(url: string, options: RequestInit = {}): Promise<any> {
-    let requestOptions: RequestInit = {
+  public async request(url: string, options: RequestConfig = {}): Promise<any> {
+    let requestOptions: RequestConfig = {
       ...this.config,
       ...options,
     };
@@ -69,18 +73,35 @@ export class Hetch {
     }
 
     try {
-      const response = await fetch(url, requestOptions);
-      let responseData = await response.text();
+      let retries = 0;
+      const maxRetries = requestOptions.maxRetries ?? this.defaults.maxRetries;
+      const retryDelay = requestOptions.retryDelay ?? this.defaults.retryDelay;
 
-      for (const interceptor of this.interceptors.response) {
-        responseData = await interceptor(responseData, response);
+      while (true) {
+        try {
+          const response = await fetch(url, requestOptions);
+          let responseData = await response.text();
+
+          for (const interceptor of this.interceptors.response) {
+            responseData = await interceptor(responseData, response);
+          }
+
+          if (
+            response.headers.get("content-type")?.includes("application/json")
+          ) {
+            responseData = JSON.parse(responseData);
+          }
+
+          return responseData;
+        } catch (error) {
+          if (retries < maxRetries! && (error instanceof TypeError || error instanceof DOMException)) {
+            retries++;
+            await new Promise((resolve) => setTimeout(resolve, retryDelay));
+            continue;
+          }
+          throw error; 
+        }
       }
-
-      if (response.headers.get("content-type")?.includes("application/json")) {
-        responseData = JSON.parse(responseData);
-      }
-
-      return responseData;
     } catch (error) {
       throw error;
     }
@@ -103,7 +124,11 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async post(url: string, data: any, options?: RequestConfig): Promise<any> {
+  public async post(
+    url: string,
+    data: any,
+    options?: RequestConfig
+  ): Promise<any> {
     return this.request(url, { method: "POST", body: data, ...options });
   }
 
@@ -114,7 +139,11 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async put(url: string, data: any, options?: RequestConfig): Promise<any> {
+  public async put(
+    url: string,
+    data: any,
+    options?: RequestConfig
+  ): Promise<any> {
     return this.request(url, { method: "PUT", body: data, ...options });
   }
 
@@ -124,7 +153,7 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async delete(url: string, options?: RequestInit): Promise<any> {
+  public async delete(url: string, options?: RequestConfig): Promise<any> {
     return this.request(url, { method: "DELETE", ...options });
   }
 
@@ -135,7 +164,11 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async any(method: string, url: string, options: RequestInit = {}): Promise<any> {
+  public async any(
+    method: string,
+    url: string,
+    options: RequestConfig = {}
+  ): Promise<any> {
     const uppercaseMethod = method.toUpperCase();
     const requestOptions: RequestConfig = {
       ...this.config,
@@ -145,4 +178,4 @@ export class Hetch {
 
     return this.request(url, requestOptions);
   }
-};
+}
