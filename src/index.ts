@@ -1,1 +1,1 @@
-import * from "./Hetch.ts"
+import * from "./Hetch.ts";
