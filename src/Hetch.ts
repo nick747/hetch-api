@@ -22,6 +22,31 @@ interface RequestConfig extends RequestInit {
   retryDelay?: number; // the dealy between each try
 }
 
+
+export type ResponseConversionType = 'JSON' | 'TEXT' | 'ARRAYBUFFER' | 'BLOB' | 'FORMDATA';
+
+/**
+ * Converts the response to a type of file
+ * @param conversionType - The type to convert to
+ * @param response - The response to convert
+*/
+async function convertResponse(conversionType: ResponseConversionType, response: Response): Promise<any> {
+  switch (conversionType) {
+    case 'JSON':
+      return response.json();
+    case 'TEXT':
+      return response.text();
+    case 'ARRAYBUFFER':
+      return response.arrayBuffer();
+    case 'BLOB':
+      return response.blob();
+    case 'FORMDATA':
+      return response.formData();
+    default:
+      throw new Error('Invalid conversion type.');
+  }
+}
+
 export class Hetch {
   private defaults: RequestConfig = {
     headers: {},
@@ -81,19 +106,27 @@ export class Hetch {
       while (true) {
         try {
           const response = await fetch(url, requestOptions);
-          let responseData = await response.text();
+
+          let responseData: any;
+
+          switch (response.headers.get('content-type')) {
+            case 'application/json':
+              responseData = await response.json();
+              break;
+            default:
+              responseData = await response.text();
+          }
 
           for (const interceptor of this.interceptors.response) {
             responseData = await interceptor(responseData, response);
           }
 
-          if (
-            response.headers.get("content-type")?.includes("application/json")
-          ) {
-            responseData = JSON.parse(responseData);
-          }
-
-          return responseData;
+          return {
+            data: responseData,
+            convert: async (conversionType: ResponseConversionType): Promise<any> => {
+              return convertResponse(conversionType, response);
+            }
+          };
         } catch (error) {
           if (retries < maxRetries! && (error instanceof TypeError || error instanceof DOMException)) {
             retries++;
