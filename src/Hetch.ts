@@ -1,27 +1,30 @@
 /**
  * We currently use TSDoc to document the code.
- * TODO: finish interceptors (DONE) 
- * TODO: add response file conversion (SEMI-DONE)
+ * TODO: finish interceptors (DONE)
+ * TODO: add response file conversion (DONE)
  * TODO: error management (SEMI-DONE)
  * TODO: headers (DONE)
- * TODO: improve timeout 
+ * TODO: improve timeout (DONE)
  * TODO: retry function (DONE)
- * TODO: finish documentation.
- * TODO: create tsconfig.json file
- * TODO: remove 'any' tipes
+ * TODO: finish documentation. (DOING)
+ * TODO: create tsconfig.json file (DONE)
+ * TODO: remove 'any' types (SEMI-DONE)
  */
+
+import fetch, { Headers, RequestInit, Response } from 'node-fetch';
 
 export type Interceptor = {
   (responseData: any): Promise<any> | any;
   (responseData: any, response: Response): Promise<any> | any;
 };
 
-interface RequestConfig extends RequestInit {
+interface RequestConfig extends Omit<RequestInit, 'body'> {
+  customHeaders?: Headers | string[][];
   timeout?: number;
   maxRetries?: number; // the maximum number of retries for network errors
-  retryDelay?: number; // the dealy between each try
+  retryDelay?: number; // the delay between each try
+  body?: string | object | null;
 }
-
 
 export type ResponseConversionType = 'JSON' | 'TEXT' | 'ARRAYBUFFER' | 'BLOB' | 'FORMDATA';
 
@@ -29,7 +32,7 @@ export type ResponseConversionType = 'JSON' | 'TEXT' | 'ARRAYBUFFER' | 'BLOB' | 
  * Converts the response to a type of file
  * @param conversionType - The type to convert to
  * @param response - The response to convert
-*/
+ */
 async function convertResponse(conversionType: ResponseConversionType, response: Response): Promise<any> {
   switch (conversionType) {
     case 'JSON':
@@ -49,7 +52,7 @@ async function convertResponse(conversionType: ResponseConversionType, response:
 
 export class Hetch {
   private defaults: RequestConfig = {
-    headers: {},
+    customHeaders: new Headers(),
     timeout: 0,
     maxRetries: 3,
     retryDelay: 1000,
@@ -105,7 +108,7 @@ export class Hetch {
 
       while (true) {
         try {
-          const response = await fetch(url, requestOptions);
+          const response = await fetch(url, requestOptions as RequestInit);
 
           let responseData: any;
 
@@ -125,15 +128,15 @@ export class Hetch {
             data: responseData,
             convert: async (conversionType: ResponseConversionType): Promise<any> => {
               return convertResponse(conversionType, response);
-            }
+            },
           };
         } catch (error) {
-          if (retries < maxRetries! && (error instanceof TypeError || error instanceof DOMException)) {
+          if (retries < maxRetries! && error instanceof TypeError) {
             retries++;
             await new Promise((resolve) => setTimeout(resolve, retryDelay));
             continue;
           }
-          throw error; 
+          throw error;
         }
       }
     } catch (error) {
