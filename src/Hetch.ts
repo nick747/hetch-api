@@ -1,54 +1,12 @@
 /**
  * We currently use TSDoc to document the code.
- * TODO: finish interceptors (DONE)
- * TODO: add response file conversion (DONE)
- * TODO: error management (SEMI-DONE)
- * TODO: headers (DONE)
- * TODO: improve timeout (DONE)
- * TODO: retry function (DONE)
  * TODO: finish documentation. (DOING)
- * TODO: create tsconfig.json file (DONE)
  * TODO: remove 'any' types (SEMI-DONE)
+ * TODO: improve project architecture (DOING)
  */
 
-import fetch, { Headers, RequestInit, Response } from 'node-fetch';
-
-export type Interceptor = {
-  (responseData: any): Promise<any> | any;
-  (responseData: any, response: Response): Promise<any> | any;
-};
-
-interface RequestConfig extends Omit<RequestInit, 'body'> {
-  customHeaders?: Headers | string[][];
-  timeout?: number;
-  maxRetries?: number; // the maximum number of retries for network errors
-  retryDelay?: number; // the delay between each try
-  body?: string | object | null;
-}
-
-export type ResponseConversionType = 'JSON' | 'TEXT' | 'ARRAYBUFFER' | 'BLOB' | 'FORMDATA';
-
-/**
- * Converts the response to a type of file
- * @param conversionType - The type to convert to
- * @param response - The response to convert
- */
-async function convertResponse(conversionType: ResponseConversionType, response: Response): Promise<any> {
-  switch (conversionType) {
-    case 'JSON':
-      return response.json();
-    case 'TEXT':
-      return response.text();
-    case 'ARRAYBUFFER':
-      return response.arrayBuffer();
-    case 'BLOB':
-      return response.blob();
-    case 'FORMDATA':
-      return response.formData();
-    default:
-      throw new Error('Invalid conversion type.');
-  }
-}
+import {ResponseConversionType, convertResponse} from './convertResponse';
+import {Interceptor, RequestConfig} from './types';
 
 export class Hetch {
   private defaults: RequestConfig = {

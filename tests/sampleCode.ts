@@ -3,13 +3,14 @@ import { Hetch } from '../src/Hetch';
 // url = 'https://jsonplaceholder.typicode.com/todos/1'
 const hetch = new Hetch();
 
-async function testHetch() {
+export async function testHetch() {
   try {
     // GET REQUEST
     const getResponse = await hetch.get('https://jsonplaceholder.typicode.com/todos/1');
     console.log('GET Response Data');
     console.log(getResponse.data);
     console.log('\n');
+    
 
     // POST REQUEST
   /*  const postData = {
@@ -60,5 +61,3 @@ console.log('\n');
     console.error('Error occured: ', error);
   }
 }
-
-testHetch();

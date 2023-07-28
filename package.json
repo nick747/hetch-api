@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "HTTP Request managing library",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,6 +30,6 @@
   },
   "dependencies": {
     "@types/node-fetch": "^2.6.4",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^2.6.12"
   }
 }
