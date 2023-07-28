@@ -6,7 +6,7 @@
  */
 
 import {ResponseConversionType, convertResponse} from './convertResponse';
-import {Interceptor, RequestConfig} from './types';
+import {Interceptor, RequestConfig, ResponseStructure, formatResponse} from './types';
 
 export class Hetch {
   private defaults: RequestConfig = {
@@ -82,8 +82,9 @@ export class Hetch {
             responseData = await interceptor(responseData, response);
           }
 
+          let formattedResponseData: ResponseStructure = await formatResponse(responseData);
           return {
-            data: responseData,
+            data: formattedResponseData,
             convert: async (conversionType: ResponseConversionType): Promise<any> => {
               return convertResponse(conversionType, response);
             },

@@ -1,15 +1,9 @@
 "use strict";
 /**
  * We currently use TSDoc to document the code.
- * TODO: finish interceptors (DONE)
- * TODO: add response file conversion (DONE)
- * TODO: error management (SEMI-DONE)
- * TODO: headers (DONE)
- * TODO: improve timeout (DONE)
- * TODO: retry function (DONE)
  * TODO: finish documentation. (DOING)
- * TODO: create tsconfig.json file (DONE)
  * TODO: remove 'any' types (SEMI-DONE)
+ * TODO: improve project architecture (DOING)
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -23,6 +17,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hetch = void 0;
 const convertResponse_1 = require("./convertResponse");
+const types_1 = require("./types");
 class Hetch {
     constructor(config = {}) {
         this.defaults = {
@@ -82,8 +77,9 @@ class Hetch {
                         for (const interceptor of this.interceptors.response) {
                             responseData = yield interceptor(responseData, response);
                         }
+                        let formattedResponseData = yield (0, types_1.formatResponse)(responseData);
                         return {
-                            data: responseData,
+                            data: formattedResponseData,
                             convert: (conversionType) => __awaiter(this, void 0, void 0, function* () {
                                 return (0, convertResponse_1.convertResponse)(conversionType, response);
                             }),
