@@ -5,8 +5,8 @@
  * TODO: improve project architecture (DONE?)
  */
 
-import { ResponseConversionType, ConvertResponse } from './ConvertResponse';
-import { Interceptor, RequestConfig, ResponseStructure } from './Types';
+import { ResponseConversionType, ConvertResponse } from './convertResponse';
+import { Interceptor, RequestConfig, ResponseStructure } from './types';
 import { formatResponse, ConfigDefaults } from './Common'
 import { Base } from './Base';
 

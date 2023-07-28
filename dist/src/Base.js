@@ -11,13 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Base = void 0;
 const Common_1 = require("./Common");
-const ConvertResponse_1 = require("./ConvertResponse");
+const convertResponse_1 = require("./convertResponse");
 class Base {
     constructor(config = {}) {
         this.defaults = Common_1.ConfigDefaults;
         this.Interceptors = {
-            request: new Array,
-            response: new Array,
+            request: [],
+            response: []
         };
         this.config = Object.assign(Object.assign({}, this.defaults), config);
     }
@@ -56,7 +56,7 @@ class Base {
                         return {
                             data: formattedResponseData,
                             convert: (conversionType) => __awaiter(this, void 0, void 0, function* () {
-                                return (0, ConvertResponse_1.ConvertResponse)(conversionType, response);
+                                return (0, convertResponse_1.ConvertResponse)(conversionType, response);
                             }),
                         };
                     }

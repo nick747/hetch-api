@@ -1,4 +1,4 @@
-import { RequestConfig, ResponseStructure } from './Types';
+import { RequestConfig, ResponseStructure } from './types';
 
 /**
  * Default settings for config in `Hetch` and `Base` classes.

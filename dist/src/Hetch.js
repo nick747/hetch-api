@@ -1,9 +1,9 @@
 "use strict";
 /**
  * We currently use TSDoc to document the code.
- * TODO: finish documentation. (DOING)
+ * TODO: finish documentation. (WIP)
  * TODO: remove 'any' types (SEMI-DONE)
- * TODO: improve project architecture (DOING)
+ * TODO: improve project architecture (DONE?)
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }

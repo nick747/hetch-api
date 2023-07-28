@@ -1,6 +1,6 @@
-import { RequestConfig, ResponseStructure, Interceptor } from "./Types";
+import { RequestConfig, ResponseStructure, Interceptor } from "./types";
 import { ConfigDefaults, formatResponse } from './Common';
-import { ConvertResponse, ResponseConversionType } from "./ConvertResponse";
+import { ConvertResponse, ResponseConversionType } from "./convertResponse";
 
 export class Base {
   private defaults: RequestConfig = ConfigDefaults
