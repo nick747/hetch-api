@@ -1,107 +1,27 @@
 /**
  * We currently use TSDoc to document the code.
- * TODO: finish documentation. (DOING)
+ * TODO: finish documentation. (WIP)
  * TODO: remove 'any' types (SEMI-DONE)
- * TODO: improve project architecture (DOING)
+ * TODO: improve project architecture (DONE?)
  */
 
-import {ResponseConversionType, convertResponse} from './convertResponse';
-import {Interceptor, RequestConfig, ResponseStructure, formatResponse} from './types';
+import { ResponseConversionType, ConvertResponse } from './ConvertResponse';
+import { Interceptor, RequestConfig, ResponseStructure } from './Types';
+import { formatResponse, ConfigDefaults } from './Common'
+import { Base } from './Base';
 
-export class Hetch {
-  private defaults: RequestConfig = {
-    customHeaders: new Headers(),
-    timeout: 0,
-    maxRetries: 3,
-    retryDelay: 1000,
-  };
-
-  private interceptors = {
-    request: [] as Interceptor[],
-    response: [] as Interceptor[],
-  };
-
-  private config: RequestConfig;
+/**
+ * Main Hetch class.
+ */
+export class Hetch extends Base {
 
   public constructor(config: RequestConfig = {}) {
-    this.config = { ...this.defaults, ...config };
+    super(config)
   }
 
-  /**
-   * Add a request interceptor to be executed before the request is sent.
-   * @param interceptor - The interceptor function to be added.
-   */
-  public useRequestInterceptor(interceptor: Interceptor) {
-    this.interceptors.request.push(interceptor);
-  }
-
-  /**
-   * Add a response interceptor to be executed after the response is received.
-   * @param interceptor - The interceptor function to be added.
-   */
-  public useResponseInterceptor(interceptor: Interceptor) {
-    this.interceptors.response.push(interceptor);
-  }
-
-  /**
-   * Base request function to manage HTTP requests.
-   * @param url - URL to send the request to.
-   * @param options - Request's options.
-   * @returns Response data.
-   */
-  public async request(url: string, options: RequestConfig = {}): Promise<any> {
-    let requestOptions: RequestConfig = {
-      ...this.config,
-      ...options,
-    };
-
-    for (const interceptor of this.interceptors.request) {
-      requestOptions = await interceptor(requestOptions);
-    }
-
-    try {
-      let retries = 0;
-      const maxRetries = requestOptions.maxRetries ?? this.defaults.maxRetries;
-      const retryDelay = requestOptions.retryDelay ?? this.defaults.retryDelay;
-
-      while (true) {
-        try {
-          const response = await fetch(url, requestOptions as RequestInit);
-
-          let responseData: any;
-
-          switch (response.headers.get('content-type')) {
-            case 'application/json':
-              responseData = await response.json();
-              break;
-            default:
-              responseData = await response.text();
-          }
-
-          for (const interceptor of this.interceptors.response) {
-            responseData = await interceptor(responseData, response);
-          }
-
-          let formattedResponseData: ResponseStructure = await formatResponse(responseData);
-          return {
-            data: formattedResponseData,
-            convert: async (conversionType: ResponseConversionType): Promise<any> => {
-              return convertResponse(conversionType, response);
-            },
-          };
-        } catch (error) {
-          if (retries < maxRetries! && error instanceof TypeError) {
-            retries++;
-            await new Promise((resolve) => setTimeout(resolve, retryDelay));
-            continue;
-          }
-          throw error;
-        }
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
+  
+  protected config = super.config
+  protected Interceptors = super.Interceptors
 
   /**
    * Perform a GET request.
@@ -110,7 +30,7 @@ export class Hetch {
    * @returns Response data.
    */
   public async get(url: string, options?: RequestConfig): Promise<any> {
-    return this.request(url, { method: "GET", ...options });
+    return this.request(url, { method: 'GET', ...options });
   }
 
   /**
@@ -125,7 +45,7 @@ export class Hetch {
     data: any,
     options?: RequestConfig
   ): Promise<any> {
-    return this.request(url, { method: "POST", body: data, ...options });
+    return this.request(url, { method: 'POST', body: data, ...options });
   }
 
   /**
@@ -140,7 +60,7 @@ export class Hetch {
     data: any,
     options?: RequestConfig
   ): Promise<any> {
-    return this.request(url, { method: "PUT", body: data, ...options });
+    return this.request(url, { method: 'PUT', body: data, ...options });
   }
 
   /**
@@ -150,7 +70,7 @@ export class Hetch {
    * @returns Response data.
    */
   public async delete(url: string, options?: RequestConfig): Promise<any> {
-    return this.request(url, { method: "DELETE", ...options });
+    return this.request(url, { method: 'DELETE', ...options });
   }
 
   /**

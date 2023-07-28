@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertResponse = void 0;
+exports.ConvertResponse = void 0;
 /**
  * Converts the response to a type of file
  * @param conversionType - The type to convert to
  * @param response - The response to convert
  */
-function convertResponse(conversionType, response) {
+function ConvertResponse(conversionType, response) {
     return __awaiter(this, void 0, void 0, function* () {
         switch (conversionType) {
             case 'JSON':
@@ -33,4 +33,4 @@ function convertResponse(conversionType, response) {
         }
     });
 }
-exports.convertResponse = convertResponse;
+exports.ConvertResponse = ConvertResponse;

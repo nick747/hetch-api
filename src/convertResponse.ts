@@ -5,7 +5,7 @@ export type ResponseConversionType = 'JSON' | 'TEXT' | 'ARRAYBUFFER' | 'BLOB' | 
  * @param conversionType - The type to convert to
  * @param response - The response to convert
  */
-export async function convertResponse(conversionType: ResponseConversionType, response: Response): Promise<any> {
+export async function ConvertResponse(conversionType: ResponseConversionType, response: Response): Promise<any> {
   switch (conversionType) {
     case 'JSON':
       return response.json();
