@@ -14,7 +14,6 @@ export class Hetch {
   private defaults: RequestConfig = ConfigDefaults;
   protected config: RequestConfig;
 
-  // Initialize the Interceptors object with request and response arrays
   protected Interceptors = {
     request: [] as Interceptor[],
     response: [] as Interceptor[],
@@ -54,7 +53,7 @@ export class Hetch {
 
           switch (response.headers.get("content-type")) {
             case "application/json":
-              responseData = await response.json(); // Parse the JSON data from the response
+              responseData = await response.json();
               break;
             default:
               responseData = await response.text();
@@ -65,7 +64,7 @@ export class Hetch {
           }
 
           return {
-            data: responseData, // Return the parsed JSON data
+            data: responseData,
           };
         } catch (error) {
           if (retries < maxRetries! && error instanceof TypeError) {
