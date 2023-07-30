@@ -1,10 +1,16 @@
 // SAMPLE CODE FOR TESTS
 import { Hetch } from "../src/Hetch";
-// url = 'https://jsonplaceholder.typicode.com/todos/1'
-const hetch = new Hetch();
 
 export async function testHetch() {
   try {
+    // Custom Configuration
+    const customConfig = {
+      timeout: 5000,
+      maxRetries: 5,
+      retryDelay: 2000,
+    };
+    const hetch = new Hetch(customConfig);
+
     // GET REQUEST
     const getResponse = await hetch.get(
       "https://jsonplaceholder.typicode.com/todos/1"
@@ -56,7 +62,7 @@ export async function testHetch() {
     console.log(customMethodResponse.data);
     console.log("\n");
   } catch (error) {
-    console.error("Error occured: ", error);
+    console.error("Error occurred: ", error);
   }
 }
 

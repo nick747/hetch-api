@@ -19,6 +19,9 @@ export class Hetch {
     response: [] as Interceptor[],
   };
 
+  /**
+   * Public constructor to modify default values while using the library
+   */
   public constructor(config: RequestConfig = {}) {
     this.config = { ...this.defaults, ...config };
   }
