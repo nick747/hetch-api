@@ -20,9 +20,11 @@ exports.ConfigDefaults = {
     retryDelay: 1000,
 };
 class Hetch {
+    /**
+     * Public constructor to modify default values while using the library
+     */
     constructor(config = {}) {
         this.defaults = exports.ConfigDefaults;
-        // Initialize the Interceptors object with request and response arrays
         this.Interceptors = {
             request: [],
             response: [],
@@ -52,7 +54,7 @@ class Hetch {
                         let responseData;
                         switch (response.headers.get("content-type")) {
                             case "application/json":
-                                responseData = yield response.json(); // Parse the JSON data from the response
+                                responseData = yield response.json();
                                 break;
                             default:
                                 responseData = yield response.text();
@@ -61,7 +63,7 @@ class Hetch {
                             responseData = yield interceptor(responseData, response);
                         }
                         return {
-                            data: responseData, // Return the parsed JSON data
+                            data: responseData,
                         };
                     }
                     catch (error) {

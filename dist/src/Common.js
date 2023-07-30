@@ -30,11 +30,11 @@ function formatResponse(response) {
         // Populate ResponseStructure
         formattedResponse.status = response.status;
         try {
-            const json = yield response.json(); // Parse the JSON data from the response
+            const json = yield response.json();
             formattedResponse.id = json.id;
             formattedResponse.title = json.title;
             formattedResponse.message = json.message;
-            formattedResponse.jsonData = json; // Store JSON data in the response structure
+            formattedResponse.jsonData = json;
         }
         catch (error) {
             console.error('Error parsing response JSON:', error);

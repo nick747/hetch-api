@@ -12,11 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.testHetch = void 0;
 // SAMPLE CODE FOR TESTS
 const Hetch_1 = require("../src/Hetch");
-// url = 'https://jsonplaceholder.typicode.com/todos/1'
-const hetch = new Hetch_1.Hetch();
 function testHetch() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // Custom Configuration
+            const customConfig = {
+                timeout: 5000,
+                maxRetries: 5,
+                retryDelay: 2000,
+            };
+            const hetch = new Hetch_1.Hetch(customConfig);
             // GET REQUEST
             const getResponse = yield hetch.get("https://jsonplaceholder.typicode.com/todos/1");
             console.log("GET Response Data");
@@ -53,7 +58,7 @@ function testHetch() {
             console.log("\n");
         }
         catch (error) {
-            console.error("Error occured: ", error);
+            console.error("Error occurred: ", error);
         }
     });
 }
