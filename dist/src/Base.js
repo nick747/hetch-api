@@ -15,9 +15,10 @@ const convertResponse_1 = require("./convertResponse");
 class Base {
     constructor(config = {}) {
         this.defaults = Common_1.ConfigDefaults;
+        // Initialize the Interceptors object with request and response arrays
         this.Interceptors = {
             request: [],
-            response: []
+            response: [],
         };
         this.config = Object.assign(Object.assign({}, this.defaults), config);
     }
@@ -52,7 +53,8 @@ class Base {
                         for (const interceptor of this.Interceptors.response) {
                             responseData = yield interceptor(responseData, response);
                         }
-                        let formattedResponseData = yield (0, Common_1.formatResponse)(responseData);
+                        const formattedResponseData = yield (0, Common_1.formatResponse)(response // Pass the original response to formatResponse
+                        );
                         return {
                             data: formattedResponseData,
                             convert: (conversionType) => __awaiter(this, void 0, void 0, function* () {

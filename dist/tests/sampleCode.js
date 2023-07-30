@@ -18,59 +18,44 @@ function testHetch() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // GET REQUEST
-            const getResponse = yield hetch.get('https://jsonplaceholder.typicode.com/todos/1');
-            console.log('GET Response Data');
+            const getResponse = yield hetch.get("https://jsonplaceholder.typicode.com/todos/1");
+            console.log("GET Response Data");
             console.log(getResponse.data);
-            console.log('\n');
+            console.log("\n");
             // POST REQUEST
-            /*  const postData = {
-                title: 'Sample Request',
+            const postData = {
+                title: "Sample Request",
                 completed: false,
                 userId: 1,
-              };
-          
-              const postResponse = await hetch.post('https://jsonplaceholder.typicode.com/todos', postData);
-              console.log('POST Response Data');
-              console.log(postResponse.data);
-              console.log('\n');
-          
-              // DELETE REQUEST
-              const deleteResponse = await hetch.delete('https://jsonplaceholder.typicode.com/todos/1');
-              console.log('DELETE Response Data');
-              console.log(deleteResponse.data);
-              console.log('\n');
-          
-              // HTTP REQUEST WITH CUSTOM METHOD - ANY
-              const customMethod = 'PATCH';
-            const customMethodData = {
-              id: 1,
-              title: 'Custom Method Request',
-              completed: false,
-              userId: 1,
             };
-          
-          const customMethodResponse = await hetch.any(customMethod, 'https://jsonplaceholder.typicode.com/todos/1', {
-            body: JSON.stringify(customMethodData)
-          });
-          console.log('Custom Method Response Data');
-          console.log(customMethodResponse.data);
-          console.log('\n');
-          
-              // RESPONSE CONVERSION
-              const response = await hetch.get('https://jsonplaceholder.typicode.com/todos/1');
-              const jsonResult = await response.convert('JSON');
-              console.log('JSON CONVERSION');
-              console.log(jsonResult);
-              
-          
-              const textResult = await response.convert('TEXT');
-              console.log('TEXT CONVERSION');
-              console.log(textResult);
-            */
+            const postResponse = yield hetch.post("https://jsonplaceholder.typicode.com/todos", postData);
+            console.log("POST Response Data");
+            console.log(postResponse.data);
+            console.log("\n");
+            // DELETE REQUEST
+            const deleteResponse = yield hetch.delete("https://jsonplaceholder.typicode.com/todos/1");
+            console.log("DELETE Response Data");
+            console.log(deleteResponse.data);
+            console.log("\n");
+            // HTTP REQUEST WITH CUSTOM METHOD - ANY
+            const customMethod = "PATCH";
+            const customMethodData = {
+                id: 1,
+                title: "Custom Method Request",
+                completed: false,
+                userId: 1,
+            };
+            const customMethodResponse = yield hetch.any(customMethod, "https://jsonplaceholder.typicode.com/todos/1", {
+                body: JSON.stringify(customMethodData),
+            });
+            console.log("Custom Method Response Data");
+            console.log(customMethodResponse.data);
+            console.log("\n");
         }
         catch (error) {
-            console.error('Error occured: ', error);
+            console.error("Error occured: ", error);
         }
     });
 }
 exports.testHetch = testHetch;
+testHetch();

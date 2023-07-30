@@ -16,21 +16,19 @@ export let ConfigDefaults: RequestConfig = {
  * @returns 
  */
 export async function formatResponse(response: Response): Promise<ResponseStructure> {
-    const formattedResponse: ResponseStructure = {};
-    
-    // Populate ResponseStructure
-    formattedResponse.status = response.status;
-    formattedResponse.working = response.headers.get('working');
-    formattedResponse.userId = parseInt(response.headers.get('user-id') || '', 10);
-    
-    try {
-      const json = await response.json();
-      formattedResponse.id = json.id;
-      formattedResponse.title = json.title;
-      formattedResponse.message = json.message;
-    } catch (error) {
-      console.error('Error parsing response JSON:', error);
-    }
+  const formattedResponse: ResponseStructure = {};
   
-    return formattedResponse;
+  // Populate ResponseStructure
+  formattedResponse.status = response.status;
+  try {
+    const json = await response.json(); // Parse the JSON data from the response
+    formattedResponse.id = json.id;
+    formattedResponse.title = json.title;
+    formattedResponse.message = json.message;
+    formattedResponse.jsonData = json; // Store JSON data in the response structure
+  } catch (error) {
+    console.error('Error parsing response JSON:', error);
+  }
+
+  return formattedResponse;
 }

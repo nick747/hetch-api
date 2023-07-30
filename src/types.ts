@@ -21,4 +21,5 @@ export type ResponseStructure = {
     id?: number,
     title?: string,
     message?: string,
+    jsonData?: any;
 }

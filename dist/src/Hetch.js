@@ -1,10 +1,4 @@
 "use strict";
-/**
- * We currently use TSDoc to document the code.
- * TODO: finish documentation. (WIP)
- * TODO: remove 'any' types (SEMI-DONE)
- * TODO: improve project architecture (DONE?)
- */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,16 +9,89 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Hetch = void 0;
-const Base_1 = require("./Base");
+exports.Hetch = exports.ConfigDefaults = void 0;
 /**
- * Main Hetch class.
+ * Default settings for config in `Hetch` and `Base` classes.
  */
-class Hetch extends Base_1.Base {
+exports.ConfigDefaults = {
+    customHeaders: new Headers(),
+    timeout: 0,
+    maxRetries: 3,
+    retryDelay: 1000,
+};
+class Hetch {
     constructor(config = {}) {
-        super(config);
-        this.config = super.config;
-        this.Interceptors = super.Interceptors;
+        this.defaults = exports.ConfigDefaults;
+        // Initialize the Interceptors object with request and response arrays
+        this.Interceptors = {
+            request: [],
+            response: [],
+        };
+        this.config = Object.assign(Object.assign({}, this.defaults), config);
+    }
+    /**
+     * Base request function to manage HTTP requests.
+     * @param url - URL to send the request to.
+     * @param options - Request's options.
+     * @returns Response data.
+     */
+    request(url, options = {}) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function* () {
+            let requestOptions = Object.assign(Object.assign({}, this.config), options);
+            for (const interceptor of this.Interceptors.request) {
+                requestOptions = yield interceptor(requestOptions);
+            }
+            try {
+                let retries = 0;
+                const maxRetries = (_a = requestOptions.maxRetries) !== null && _a !== void 0 ? _a : this.defaults.maxRetries;
+                const retryDelay = (_b = requestOptions.retryDelay) !== null && _b !== void 0 ? _b : this.defaults.retryDelay;
+                while (true) {
+                    try {
+                        const response = yield fetch(url, requestOptions);
+                        let responseData;
+                        switch (response.headers.get("content-type")) {
+                            case "application/json":
+                                responseData = yield response.json(); // Parse the JSON data from the response
+                                break;
+                            default:
+                                responseData = yield response.text();
+                        }
+                        for (const interceptor of this.Interceptors.response) {
+                            responseData = yield interceptor(responseData, response);
+                        }
+                        return {
+                            data: responseData, // Return the parsed JSON data
+                        };
+                    }
+                    catch (error) {
+                        if (retries < maxRetries && error instanceof TypeError) {
+                            retries++;
+                            yield new Promise((resolve) => setTimeout(resolve, retryDelay));
+                            continue;
+                        }
+                        throw error;
+                    }
+                }
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    /**
+     * Add a request interceptor to be executed before the request is sent.
+     * @param interceptor - The interceptor function to be added.
+     */
+    useRequestInterceptor(interceptor) {
+        this.Interceptors.request.push(interceptor);
+    }
+    /**
+     * Add a response interceptor to be executed after the response is received.
+     * @param interceptor - The interceptor function to be added.
+     */
+    useResponseInterceptor(interceptor) {
+        this.Interceptors.response.push(interceptor);
     }
     /**
      * Perform a GET request.
@@ -34,7 +101,7 @@ class Hetch extends Base_1.Base {
      */
     get(url, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.request(url, Object.assign({ method: 'GET' }, options));
+            return this.request(url, Object.assign({ method: "GET" }, options));
         });
     }
     /**
@@ -46,7 +113,7 @@ class Hetch extends Base_1.Base {
      */
     post(url, data, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.request(url, Object.assign({ method: 'POST', body: data }, options));
+            return this.request(url, Object.assign({ method: "POST", body: data }, options));
         });
     }
     /**
@@ -58,7 +125,7 @@ class Hetch extends Base_1.Base {
      */
     put(url, data, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.request(url, Object.assign({ method: 'PUT', body: data }, options));
+            return this.request(url, Object.assign({ method: "PUT", body: data }, options));
         });
     }
     /**
@@ -69,7 +136,7 @@ class Hetch extends Base_1.Base {
      */
     delete(url, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.request(url, Object.assign({ method: 'DELETE' }, options));
+            return this.request(url, Object.assign({ method: "DELETE" }, options));
         });
     }
     /**

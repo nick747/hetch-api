@@ -29,13 +29,12 @@ function formatResponse(response) {
         const formattedResponse = {};
         // Populate ResponseStructure
         formattedResponse.status = response.status;
-        formattedResponse.working = response.headers.get('working');
-        formattedResponse.userId = parseInt(response.headers.get('user-id') || '', 10);
         try {
-            const json = yield response.json();
+            const json = yield response.json(); // Parse the JSON data from the response
             formattedResponse.id = json.id;
             formattedResponse.title = json.title;
             formattedResponse.message = json.message;
+            formattedResponse.jsonData = json; // Store JSON data in the response structure
         }
         catch (error) {
             console.error('Error parsing response JSON:', error);
