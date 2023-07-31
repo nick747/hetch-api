@@ -25,6 +25,9 @@
   },
   "homepage": "https://github.com/nick747/hetch-api#readme",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
+    "eslint": "^8.46.0",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.6"
   },

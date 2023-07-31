@@ -32,7 +32,10 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async request(url: string, options: RequestConfig = {}): Promise<ResponseData> {
+  public async request(
+    url: string,
+    options: RequestConfig = {}
+  ): Promise<ResponseData> {
     let requestOptions: RequestConfig = {
       ...this.config,
       ...options,
@@ -45,8 +48,7 @@ export class Hetch {
     try {
       let retries = 0;
       const maxRetries = requestOptions.maxRetries ?? this.defaults.maxRetries;
-      const retryDelay =
-        requestOptions.retryDelay ?? this.defaults.retryDelay;
+      const retryDelay = requestOptions.retryDelay ?? this.defaults.retryDelay;
 
       while (true) {
         try {
@@ -105,7 +107,10 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async get(url: string, options?: RequestConfig): Promise<ResponseData> {
+  public async get(
+    url: string,
+    options?: RequestConfig
+  ): Promise<ResponseData> {
     return this.request(url, { method: "GET", ...options });
   }
 
