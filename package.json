@@ -1,8 +1,8 @@
 {
   "name": "hetch-api",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "description": "HTTP Request managing library",
-  "main": "index.js",
+  "main": "dist/src/Hetch.js",
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -34,5 +34,6 @@
   },
   "directories": {
     "test": "tests"
-  }
+  },
+  "types": "./dist/src/Hetch.d.ts"
 }
