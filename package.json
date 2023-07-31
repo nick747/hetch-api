@@ -1,6 +1,6 @@
 {
   "name": "hetch-api",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "HTTP Request managing library",
   "main": "index.js",
   "type": "commonjs",
@@ -31,5 +31,8 @@
   "dependencies": {
     "@types/node-fetch": "^2.6.4",
     "node-fetch": "^2.6.12"
+  },
+  "directories": {
+    "test": "tests"
   }
 }
