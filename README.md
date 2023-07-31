@@ -87,6 +87,36 @@ hetch.useResponseInterceptor(async (responseData, response) => {
 });
 ```
 
+## Example of Use
+Here's an example of use for the Hetch library:
+```js
+import { Hetch } from "hetch-api";
+
+const customConfig = {
+  timeout: 5000,
+  maxRetries: 5,
+  retryDelay: 2000,
+};
+
+const hetch = new Hetch(customConfig);
+
+const url = 'https://jsonplaceholder.typicode.com/todos/1';
+const getResponse = await hetch.get(url);
+console.log("GET Response Data");
+console.log(getResponse.data);
+```
+
+Output:
+```json
+GET Response Data
+{
+  "userId": 1,
+  "id": 1,
+  "title": "delectus aut autem",
+  "completed": false
+}
+```
+
 ## Contributions
 Contributions to Hetch-API are welcome! Feel free to create issues or submit pull requests for improvements or bug fixes.
 
