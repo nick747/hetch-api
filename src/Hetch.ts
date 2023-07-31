@@ -1,7 +1,7 @@
-import { RequestConfig, ResponseStructure, Interceptor } from "./types";
+import { RequestConfig, Interceptor, ResponseData } from "./types";
 
 /**
- * Default settings for config in `Hetch` and `Base` classes.
+ * Default settings for config in `Hetch` class.
  */
 export let ConfigDefaults: RequestConfig = {
   customHeaders: new Headers(),
@@ -20,7 +20,7 @@ export class Hetch {
   };
 
   /**
-   * Public constructor to modify default values while using the library
+   * Constructor to modify default values while using the library
    */
   public constructor(config: RequestConfig = {}) {
     this.config = { ...this.defaults, ...config };
@@ -32,7 +32,7 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async request(url: string, options: RequestConfig = {}): Promise<any> {
+  public async request(url: string, options: RequestConfig = {}): Promise<ResponseData> {
     let requestOptions: RequestConfig = {
       ...this.config,
       ...options,
@@ -52,7 +52,7 @@ export class Hetch {
         try {
           const response = await fetch(url, requestOptions as RequestInit);
 
-          let responseData: any;
+          let responseData: object | string;
 
           switch (response.headers.get("content-type")) {
             case "application/json":
@@ -105,7 +105,7 @@ export class Hetch {
    * @param options - Request's options.
    * @returns Response data.
    */
-  public async get(url: string, options?: RequestConfig): Promise<any> {
+  public async get(url: string, options?: RequestConfig): Promise<ResponseData> {
     return this.request(url, { method: "GET", ...options });
   }
 
@@ -120,7 +120,7 @@ export class Hetch {
     url: string,
     data: any,
     options?: RequestConfig
-  ): Promise<any> {
+  ): Promise<ResponseData> {
     return this.request(url, { method: "POST", body: data, ...options });
   }
 
@@ -135,7 +135,7 @@ export class Hetch {
     url: string,
     data: any,
     options?: RequestConfig
-  ): Promise<any> {
+  ): Promise<ResponseData> {
     return this.request(url, { method: "PUT", body: data, ...options });
   }
 
@@ -160,7 +160,7 @@ export class Hetch {
     method: string,
     url: string,
     options: RequestConfig = {}
-  ): Promise<any> {
+  ): Promise<ResponseData> {
     const uppercaseMethod = method.toUpperCase();
     const requestOptions: RequestConfig = {
       ...this.config,

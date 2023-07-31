@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hetch = exports.ConfigDefaults = void 0;
 /**
- * Default settings for config in `Hetch` and `Base` classes.
+ * Default settings for config in `Hetch` class.
  */
 exports.ConfigDefaults = {
     customHeaders: new Headers(),
@@ -21,7 +21,7 @@ exports.ConfigDefaults = {
 };
 class Hetch {
     /**
-     * Public constructor to modify default values while using the library
+     * Constructor to modify default values while using the library
      */
     constructor(config = {}) {
         this.defaults = exports.ConfigDefaults;

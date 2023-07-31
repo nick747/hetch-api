@@ -1,8 +1,8 @@
 /* --- */
 export type Interceptor = {
-    (responseData: any): Promise<any> | any;
-    (responseData: any, response: Response): Promise<any> | any;
-};
+    <T>(responseData: T): Promise<T> | T;
+    <T>(responseData: T, response: Response): Promise<T> | T;
+  };
 
 /* --- */
 export interface RequestConfig extends Omit<RequestInit, 'body'> {
@@ -21,5 +21,10 @@ export type ResponseStructure = {
     id?: number,
     title?: string,
     message?: string,
-    jsonData?: any;
+    jsonData?: object;
+}
+
+/* --- */
+export type ResponseData = {
+    data: object | string;
 }
