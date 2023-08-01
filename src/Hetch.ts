@@ -1,3 +1,4 @@
+import { ClientError, NetworkError, ServerError } from "./ErrorHandling";
 import { RequestConfig, Interceptor, ResponseData } from "./types";
 
 /**
@@ -72,12 +73,18 @@ export class Hetch {
             data: responseData,
           };
         } catch (error) {
-          if (retries < maxRetries! && error instanceof TypeError) {
+          if (error instanceof NetworkError && retries < maxRetries!) {
             retries++;
             await new Promise((resolve) => setTimeout(resolve, retryDelay));
             continue;
+          } else if (error instanceof ServerError) {
+            throw new ServerError(
+              error.statusCode,
+              "Server responded with an error"
+            );
+          } else {
+            throw new ClientError("An error occurred during the request");
           }
-          throw error;
         }
       }
     } catch (error) {

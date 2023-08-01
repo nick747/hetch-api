@@ -1,18 +1,18 @@
-class NetworkError extends Error {
+export class NetworkError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "NetworkError";
   }
 }
 
-class ClientError extends Error {
+export class ClientError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ClientError";
   }
 }
 
-class ServerError extends Error {
+export class ServerError extends Error {
   statusCode: number;
 
   constructor(statusCode: number, message: string) {
