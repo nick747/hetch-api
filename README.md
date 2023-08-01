@@ -2,6 +2,19 @@
 
 Hetch is a fetch wrapper that provides you with a convenient way to make HTTP requests. It simplifies the process of making API calls and offers several useful features to enhance your development experience.
 
+## Table of Contents
+- [Features](#features)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Making HTTP Requests](#making-http-requests)
+- [Custom Method](#custom-method)
+- [Configuration](#configuration)
+- [Interceptors](#interceptors)
+- [Error Handling](#error-handling)
+- [Example of Use](#example-of-use)
+- [Contributions](#contributions)
+- [License](#license)
+
 ## Features
 
 - **Direct access to methods** like `get`, `put`, `post`, and `delete`, allowing you to make different types of HTTP requests easily.
