@@ -18,7 +18,10 @@
     "fetch",
     "hetch"
   ],
-  "contributors": ["Nick747", "LuaInjector"],
+  "contributors": [
+    "Nick747",
+    "LuaInjector"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nick747/hetch-api/issues"
@@ -28,6 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
     "eslint": "^8.46.0",
+    "npmignore": "^0.3.0",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.6"
   },
