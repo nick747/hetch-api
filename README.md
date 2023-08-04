@@ -2,6 +2,19 @@
 
 Hetch is a fetch wrapper that provides you with a convenient way to make HTTP requests. It simplifies the process of making API calls and offers several useful features to enhance your development experience.
 
+## Table of Contents
+- [Features](#features)
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+- [Making HTTP Requests](#making-http-requests)
+- [Custom Method](#custom-method)
+- [Configuration](#configuration)
+- [Interceptors](#interceptors)
+- [Error Handling](#error-handling)
+- [Example of Use](#example-of-use)
+- [Contributions](#contributions)
+- [License](#license)
+
 ## Features
 
 - **Direct access to methods** like `get`, `put`, `post`, and `delete`, allowing you to make different types of HTTP requests easily.
@@ -85,6 +98,43 @@ hetch.useResponseInterceptor(async (responseData, response) => {
   // Modify response data if needed
   return responseData;
 });
+```
+
+## Error Handling
+Hetch-API provides built-in error handling for network errors and server responses. When making HTTP requests, the library handles different types of errors and provides appropriate error classes for each scenario.
+
+### Network Errors
+When a network error occurs (e.g., the server is down or there is no internet connection), Hetch-API throws a `NetworkError`. This error indicates that the network request failed and provides information about the error.
+
+### Server Errors
+If the server returns an error status code (e.g., 4xx or 5xx), Hetch-API throws a `ServerError`. This error includes the status code returned by the server, allowing you to handle specific server errors in your code.
+
+### Client Errors
+For all other errors that do not fall under network errors or server errors, Hetch-API throws a `ClientError`. This error is a generic client-side error and can be used to handle any other unexpected errors.
+
+Here's an example of how you could implement error handling in your project using Hetch-API:
+```js
+import { Hetch, NetworkError, ServerError, ClientError } from "hetch-api";
+
+const hetch = new Hetch();
+
+const url = "[url]";
+
+try {
+  const response = await hetch.get(url);
+  console.log("Response Data:", response.data);
+} catch (error) {
+  if (error instanceof NetworkError) {
+    console.error("Network Error:", error.message);
+  } else if (error instanceof ServerError) {
+    console.error("Server Error:", error.message);
+    console.error("Status Code:", error.statusCode);
+  } else if (error instanceof ClientError) {
+    console.error("Client Error:", error.message);
+  } else {
+    console.error("Unexpected Error:", error.message);
+  }
+}
 ```
 
 ## Example of Use
