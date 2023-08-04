@@ -18,7 +18,7 @@
     "fetch",
     "hetch"
   ],
-  "author": "Nick747, LuaInjector",
+  "contributors": ["Nick747", "LuaInjector"],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nick747/hetch-api/issues"
