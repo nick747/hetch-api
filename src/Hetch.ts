@@ -1,15 +1,6 @@
 import { ClientError, NetworkError, ServerError } from "./ErrorHandling";
 import { RequestConfig, Interceptor, ResponseData } from "./types";
-
-/**
- * Default settings for config in `Hetch` class.
- */
-export let ConfigDefaults: RequestConfig = {
-  customHeaders: new Headers(),
-  timeout: 0,
-  maxRetries: 3,
-  retryDelay: 1000,
-};
+import { ConfigDefaults } from './Common.ts';
 
 export class Hetch {
   private defaults: RequestConfig = ConfigDefaults;
